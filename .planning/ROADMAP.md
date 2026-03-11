@@ -34,7 +34,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 4 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Next.js scaffold, Prisma schema, Tailwind v4 taco theme, RegistrarAdapter interface
+- [x] 01-01-PLAN.md — Next.js scaffold, Prisma schema, Tailwind v4 taco theme, RegistrarAdapter interface
 - [ ] 01-02-PLAN.md — Auth.js v5 setup, signup/login/logout flows, route protection middleware
 - [ ] 01-03-PLAN.md — Reusable UI components (Button, Input, Card), public navbar, dashboard sidebar layouts
 - [ ] 01-04-PLAN.md — Password reset flow, profile settings page, end-to-end verification checkpoint
@@ -109,7 +109,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation and Authentication | 0/4 | Planning complete | - |
+| 1. Foundation and Authentication | 1/4 | In progress | - |
 | 2. Domain Search and Landing Page | 0/? | Not started | - |
 | 3. Domain Registration and Dashboard | 0/? | Not started | - |
 | 4. DNS Management | 0/? | Not started | - |
