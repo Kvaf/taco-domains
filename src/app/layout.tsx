@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Anybody, Outfit, JetBrains_Mono } from "next/font/google";
+import { SessionProvider } from "@/components/providers/session-provider";
 import "./globals.css";
 
 const anybody = Anybody({
@@ -36,7 +37,9 @@ export default function RootLayout({
       lang="en"
       className={`${anybody.variable} ${outfit.variable} ${jetbrainsMono.variable}`}
     >
-      <body className="bg-bg text-text antialiased">{children}</body>
+      <body className="bg-bg text-text antialiased">
+        <SessionProvider>{children}</SessionProvider>
+      </body>
     </html>
   );
 }
