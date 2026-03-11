@@ -12,7 +12,7 @@ Taco Domains transforms an existing static landing page into a full-stack Next.j
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation and Authentication** - Project scaffold, database, auth system, design system, and responsive layout
+- [x] **Phase 1: Foundation and Authentication** - Project scaffold, database, auth system, design system, and responsive layout
 - [ ] **Phase 2: Domain Search and Landing Page** - Real-time RDAP search, TLD pricing, bulk search, and the public landing page
 - [ ] **Phase 3: Domain Registration and Dashboard** - Registration flow, management dashboard, renewals, domain lock, WHOIS privacy, and URL redirects
 - [ ] **Phase 4: DNS Management** - Full CRUD for DNS records, domain selector, and DNSSEC toggle
@@ -35,9 +35,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 01-01-PLAN.md — Next.js scaffold, Prisma schema, Tailwind v4 taco theme, RegistrarAdapter interface
-- [ ] 01-02-PLAN.md — Auth.js v5 setup, signup/login/logout flows, route protection middleware
-- [ ] 01-03-PLAN.md — Reusable UI components (Button, Input, Card), public navbar, dashboard sidebar layouts
-- [ ] 01-04-PLAN.md — Password reset flow, profile settings page, end-to-end verification checkpoint
+- [x] 01-02-PLAN.md — Auth.js v5 setup, signup/login/logout flows, route protection middleware
+- [x] 01-03-PLAN.md — Reusable UI components (Button, Input, Card), public navbar, dashboard sidebar layouts
+- [x] 01-04-PLAN.md — Password reset flow, profile settings page, end-to-end verification checkpoint
 
 ### Phase 2: Domain Search and Landing Page
 **Goal**: Users can search for domain availability in real-time and see the full public landing page with hero, features, and pricing
@@ -109,7 +109,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation and Authentication | 1/4 | In progress | - |
+| 1. Foundation and Authentication | 4/4 | Complete | 2026-03-11 |
 | 2. Domain Search and Landing Page | 0/? | Not started | - |
 | 3. Domain Registration and Dashboard | 0/? | Not started | - |
 | 4. DNS Management | 0/? | Not started | - |
