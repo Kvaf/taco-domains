@@ -50,11 +50,12 @@ Plans:
   4. User sees alternative name suggestions when their first-choice domain is taken
   5. User cannot submit an invalid domain name -- names are validated per RFC 5891 with clear error messages before any search executes
   6. The public landing page displays hero section, domain search bar, feature highlights, and pricing tiers
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
+- [ ] 02-01-PLAN.md — TLD config, RFC 5891 validation, RDAP client with DNS fallback, suggestions, Vitest setup + tests
+- [ ] 02-02-PLAN.md — Landing page server components (hero, tagline, services, how-it-works, features, taco specials, pricing, footer)
+- [ ] 02-03-PLAN.md — Route Handler API, search UI components, landing page composition + visual checkpoint
 
 ### Phase 3: Domain Registration and Dashboard
 **Goal**: Users can register domains and manage their entire portfolio through a comprehensive dashboard
@@ -110,7 +111,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation and Authentication | 4/4 | Complete | 2026-03-11 |
-| 2. Domain Search and Landing Page | 0/? | Not started | - |
+| 2. Domain Search and Landing Page | 0/3 | Not started | - |
 | 3. Domain Registration and Dashboard | 0/? | Not started | - |
 | 4. DNS Management | 0/? | Not started | - |
 | 5. Marketplace | 0/? | Not started | - |
