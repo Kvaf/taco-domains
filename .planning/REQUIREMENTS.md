@@ -144,13 +144,79 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (To be populated during roadmap creation) | | |
+| LAND-01 | Phase 1 | Pending |
+| LAND-02 | Phase 1 | Pending |
+| LAND-03 | Phase 1 | Pending |
+| LAND-04 | Phase 1 | Pending |
+| LAND-05 | Phase 1 | Pending |
+| LAND-06 | Phase 1 | Pending |
+| LAND-07 | Phase 1 | Pending |
+| LAND-08 | Phase 1 | Pending |
+| LAND-09 | Phase 1 | Pending |
+| SRCH-01 | Phase 2 | Pending |
+| SRCH-02 | Phase 2 | Pending |
+| SRCH-03 | Phase 2 | Pending |
+| SRCH-04 | Phase 2 | Pending |
+| SRCH-05 | Phase 2 | Pending |
+| SRCH-06 | Phase 2 | Pending |
+| SRCH-07 | Phase 2 | Pending |
+| CART-01 | Phase 3 | Pending |
+| CART-02 | Phase 3 | Pending |
+| CART-03 | Phase 3 | Pending |
+| CART-04 | Phase 3 | Pending |
+| CART-05 | Phase 3 | Pending |
+| CART-06 | Phase 3 | Pending |
+| DASH-01 | Phase 4 | Pending |
+| DASH-02 | Phase 4 | Pending |
+| DASH-03 | Phase 4 | Pending |
+| DASH-04 | Phase 4 | Pending |
+| DASH-05 | Phase 4 | Pending |
+| DASH-06 | Phase 4 | Pending |
+| DNS-01 | Phase 5 | Pending |
+| DNS-02 | Phase 5 | Pending |
+| DNS-03 | Phase 5 | Pending |
+| DNS-04 | Phase 5 | Pending |
+| DNS-05 | Phase 5 | Pending |
+| DNS-06 | Phase 5 | Pending |
+| DNS-07 | Phase 5 | Pending |
+| MAIL-01 | Phase 5 | Pending |
+| MAIL-02 | Phase 5 | Pending |
+| MAIL-03 | Phase 5 | Pending |
+| SEC-01 | Phase 6 | Pending |
+| SEC-02 | Phase 6 | Pending |
+| SEC-03 | Phase 6 | Pending |
+| SEC-04 | Phase 6 | Pending |
+| SEC-05 | Phase 6 | Pending |
+| MRKT-01 | Phase 7 | Pending |
+| MRKT-02 | Phase 7 | Pending |
+| MRKT-03 | Phase 7 | Pending |
+| MRKT-04 | Phase 7 | Pending |
+| LINK-01 | Phase 7 | Pending |
+| LINK-02 | Phase 7 | Pending |
+| LINK-03 | Phase 7 | Pending |
+| API-01 | Phase 8 | Pending |
+| API-02 | Phase 8 | Pending |
+| API-03 | Phase 8 | Pending |
+| BILL-01 | Phase 8 | Pending |
+| BILL-02 | Phase 8 | Pending |
+| BILL-03 | Phase 8 | Pending |
+| BILL-04 | Phase 8 | Pending |
+| BILL-05 | Phase 8 | Pending |
+| SUPP-01 | Phase 8 | Pending |
+| SUPP-02 | Phase 8 | Pending |
+| SUPP-03 | Phase 8 | Pending |
+| UX-01 | Phase 1 | Pending |
+| UX-02 | Phase 1 | Pending |
+| UX-03 | Phase 1 | Pending |
+| UX-04 | Phase 1 | Pending |
+| UX-05 | Phase 1 | Pending |
 
 **Coverage:**
-- v1 requirements: 53 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 53
+- v1 requirements: 66 total
+- Mapped to phases: 66
+- Unmapped: 0
 
 ---
+
 *Requirements defined: 2026-03-11*
-*Last updated: 2026-03-11 after initial definition*
+*Last updated: 2026-03-11 after roadmap creation*
