@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taco Domains — Get Your Domain. No Salsa Required.</title>
+<link rel="icon" type="image/png" href="taco_logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;600;700;800;900&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#070709;--bg2:#0e0e14;--bg3:#16161f;--surface:#1c1c28;--surface2:#24243a;
+  --border:#2a2a40;--border2:#3a3a55;
+  --fire:#ff5722;--fire-light:#ff8a65;--fire-dark:#bf360c;
+  --lime:#76ff03;--lime-dark:#64dd17;
+  --gold:#ffd740;--gold-dark:#ffc400;
+  --cyan:#00e5ff;--cyan-dark:#00b8d4;
+  --red:#ff1744;--green:#00e676;
+  --text:#f0f0f8;--text2:#a0a0b8;--text3:#60607a;--text4:#40405a;
+  --gradient-fire:linear-gradient(135deg,#ff5722,#ff9800,#ffc107);
+  --gradient-cool:linear-gradient(135deg,#00e5ff,#76ff03);
+  --gradient-dark:linear-gradient(180deg,var(--bg),var(--bg2));
+  --radius:16px;--radius-sm:10px;--radius-xs:6px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+body::after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+::selection{background:var(--fire);color:#000}
+a{color:var(--fire);text-decoration:none;transition:.25s}
+a:hover{color:var(--fire-light)}
+h1,h2,h3,h4,h5{font-family:'Anybody',sans-serif;font-weight:800;letter-spacing:-.03em}
+.mono{font-family:'JetBrains Mono',monospace}
+.container{max-width:1240px;margin:0 auto;padding:0 24px}
+
+/* ============ NAV ============ */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 32px;height:68px;display:flex;align-items:center;justify-content:space-between;background:rgba(7,7,9,.82);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,.04)}
+.nav-logo{display:flex;align-items:center;gap:10px;font-family:'Anybody',sans-serif;font-weight:900;font-size:20px;color:var(--text)}
+.nav-logo img{height:38px;border-radius:8px}
+.nav-links{display:flex;gap:6px;align-items:center}
+.nav-links a{color:var(--text2);font-size:13.5px;font-weight:500;padding:8px 14px;border-radius:8px;transition:.2s}
+.nav-links a:hover{color:var(--text);background:rgba(255,255,255,.05)}
+.nav-cta{background:var(--gradient-fire)!important;color:#000!important;font-weight:700!important;border-radius:50px!important;padding:9px 22px!important}
+.nav-cta:hover{box-shadow:0 4px 24px rgba(255,87,34,.4);transform:translateY(-1px)}
+.mobile-toggle{display:none;background:0;border:0;color:var(--text);font-size:26px;cursor:pointer}
+
+/* ============ HERO ============ */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg .orb{position:absolute;border-radius:50%;filter:blur(120px);opacity:.12;animation:orbFloat 20s ease-in-out infinite}
+.hero-bg .orb1{width:600px;height:600px;background:#ff5722;top:-20%;left:-10%;animation-delay:0s}
+.hero-bg .orb2{width:500px;height:500px;background:#ffc107;bottom:-10%;right:-10%;animation-delay:-7s}
+.hero-bg .orb3{width:350px;height:350px;background:#00e5ff;top:30%;right:20%;animation-delay:-14s}
+@keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(30px,-40px) scale(1.05)}50%{transform:translate(-20px,30px) scale(.95)}75%{transform:translate(40px,20px) scale(1.03)}}
+
+.hero>*{position:relative;z-index:1}
+.hero-chip{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);padding:7px 18px;border-radius:50px;font-size:13px;color:var(--text2);margin-bottom:28px;animation:fadeUp .5s ease-out}
+.hero-chip .pulse{width:8px;height:8px;background:var(--lime);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+
+.hero-logo-img{width:140px;height:140px;border-radius:28px;margin-bottom:28px;animation:fadeUp .6s ease-out;filter:drop-shadow(0 0 50px rgba(255,87,34,.25))}
+.hero h1{font-size:clamp(2.8rem,7.5vw,6rem);line-height:1.02;margin-bottom:16px;animation:fadeUp .7s ease-out}
+.hero h1 .fire{background:var(--gradient-fire);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:19px;color:var(--text2);max-width:560px;margin-bottom:40px;animation:fadeUp .8s ease-out;font-weight:400}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+/* Search bar */
+.search-wrap{width:100%;max-width:680px;animation:fadeUp .9s ease-out}
+.search-bar{display:flex;background:var(--bg2);border:2px solid var(--border);border-radius:60px;overflow:hidden;transition:.3s}
+.search-bar:focus-within{border-color:var(--fire);box-shadow:0 0 0 4px rgba(255,87,34,.12),0 0 40px rgba(255,87,34,.08)}
+.search-bar input{flex:1;padding:18px 26px;background:0;border:0;outline:0;color:var(--text);font-size:16px;font-family:'Outfit',sans-serif}
+.search-bar input::placeholder{color:var(--text4)}
+.search-bar button{background:var(--gradient-fire);border:0;padding:18px 32px;cursor:pointer;font-family:'Anybody',sans-serif;font-weight:700;font-size:15px;color:#000;white-space:nowrap;transition:.2s}
+.search-bar button:hover{opacity:.9}
+
+.tld-row{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.tld-row span{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text3);background:var(--surface);border:1px solid var(--border);padding:5px 14px;border-radius:50px;cursor:pointer;transition:.25s;user-select:none}
+.tld-row span:hover{border-color:var(--fire);color:var(--fire)}
+
+/* Search results */
+.results-box{margin-top:20px;width:100%;display:none;text-align:left}
+.results-box.show{display:block}
+.results-box .loading{text-align:center;padding:24px;color:var(--text2);font-size:14px}
+.results-box .loading .spinner{display:inline-block;width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--fire);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:10px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.r-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg2);border:1px solid var(--border);padding:14px 22px;border-radius:var(--radius-sm);margin-bottom:6px;animation:fadeUp .25s ease-out}
+.r-item .r-domain{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:15px}
+.r-item .r-avail{font-size:12px;font-weight:600;padding:4px 12px;border-radius:50px}
+.r-item .r-avail.yes{background:rgba(0,230,118,.12);color:var(--green)}
+.r-item .r-avail.no{background:rgba(255,23,68,.1);color:var(--red)}
+.r-item .r-avail.checking{background:rgba(255,215,64,.1);color:var(--gold)}
+.r-item .btn-sm{background:var(--fire);color:#000;border:0;padding:7px 18px;border-radius:50px;font-weight:700;font-size:12px;cursor:pointer;transition:.2s}
+.r-item .btn-sm:hover{transform:scale(1.05)}
+.r-item .btn-sm.offer{background:var(--surface);color:var(--text2);border:1px solid var(--border)}
+.r-item .r-right{display:flex;align-items:center;gap:12px}
+.bulk-toggle{margin-top:14px;display:flex;align-items:center;gap:10px}
+.bulk-toggle label{font-size:13px;color:var(--text2);cursor:pointer}
+.bulk-area{display:none;margin-top:12px}
+.bulk-area.show{display:block}
+.bulk-area textarea{width:100%;min-height:100px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:13px;resize:vertical}
+.bulk-area textarea::placeholder{color:var(--text4)}
+.bulk-area button{margin-top:8px}
+
+/* ============ CTA BUTTONS ROW ============ */
+.hero-ctas{display:flex;gap:14px;justify-content:center;margin-top:12px;margin-bottom:20px;flex-wrap:wrap;animation:fadeUp .85s ease-out}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:50px;font-weight:700;font-size:14px;cursor:pointer;transition:.3s;border:0;font-family:'Outfit',sans-serif}
+.btn-fire{background:var(--gradient-fire);color:#000}
+.btn-fire:hover{box-shadow:0 6px 30px rgba(255,87,34,.35);transform:translateY(-2px)}
+.btn-outline{background:transparent;color:var(--text);border:2px solid var(--border)}
+.btn-outline:hover{border-color:var(--fire);color:var(--fire)}
+.btn-ghost{background:rgba(255,255,255,.05);color:var(--text2);border:1px solid transparent}
+.btn-ghost:hover{border-color:var(--border);color:var(--text)}
+
+/* ============ SECTION DEFAULTS ============ */
+section{padding:100px 24px;max-width:1240px;margin:0 auto}
+.slabel{font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:3px;color:var(--fire);margin-bottom:14px}
+.stitle{font-size:clamp(2rem,4vw,3rem);margin-bottom:16px;line-height:1.1}
+.sdesc{font-size:17px;color:var(--text2);max-width:600px;margin-bottom:52px}
+
+/* ============ SERVICES STRIP ============ */
+.services-strip{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:60px 24px;overflow:hidden}
+.services-inner{max-width:1240px;margin:0 auto}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px}
+.srv-card{text-align:center;padding:32px 20px}
+.srv-icon{font-size:40px;margin-bottom:14px;display:block}
+.srv-card h4{font-size:16px;margin-bottom:6px}
+.srv-card p{font-size:13px;color:var(--text2);line-height:1.6}
+
+/* ============ FEATURES GRID ============ */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:16px}
+.f-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:34px 30px;position:relative;overflow:hidden;transition:.35s;cursor:default}
+.f-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient-fire);transform:scaleX(0);transform-origin:left;transition:.4s}
+.f-card:hover::before{transform:scaleX(1)}
+.f-card:hover{background:var(--bg3);border-color:rgba(255,87,34,.2);transform:translateY(-3px);box-shadow:0 0 40px rgba(255,87,34,.06)}
+.f-icon{font-size:32px;margin-bottom:16px;display:inline-block}
+.f-card h3{font-size:18px;margin-bottom:10px}
+.f-card p{font-size:13.5px;color:var(--text2);line-height:1.7}
+.f-tag{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:3px 10px;border-radius:50px;margin-top:14px}
+.tag-free{background:rgba(0,229,255,.12);color:var(--cyan)}
+.tag-new{background:rgba(255,87,34,.12);color:var(--fire)}
+.tag-hot{background:rgba(255,23,68,.1);color:var(--red)}
+.tag-pro{background:rgba(255,215,64,.12);color:var(--gold)}
+
+/* ============ DASHBOARD ============ */
+.dash-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:0 8px 60px rgba(0,0,0,.4)}
+.dash-chrome{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--surface);border-bottom:1px solid var(--border)}
+.dots{display:flex;gap:7px}.dots span{width:11px;height:11px;border-radius:50%}.dots span:nth-child(1){background:#ff5f57}.dots span:nth-child(2){background:#febc2e}.dots span:nth-child(3){background:#28c840}
+.dash-url{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3);background:var(--bg);padding:5px 14px;border-radius:5px;border:1px solid var(--border)}
+.dash-body{display:grid;grid-template-columns:200px 1fr;min-height:480px}
+.dash-side{background:var(--surface);border-right:1px solid var(--border);padding:20px 0}
+.dash-nav{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:13px;color:var(--text2);cursor:pointer;transition:.2s;border-left:3px solid transparent}
+.dash-nav:hover,.dash-nav.active{color:var(--text);background:rgba(255,87,34,.04);border-left-color:var(--fire)}
+.dash-main{padding:28px}
+.dash-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.ds{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:18px}
+.ds .ds-l{font-size:11px;color:var(--text3);margin-bottom:6px}
+.ds .ds-v{font-family:'Anybody',sans-serif;font-size:26px;font-weight:800}
+.ds .ds-c{font-size:11px;margin-top:4px}
+.ds .ds-c.up{color:var(--green)}.ds .ds-c.down{color:var(--red)}
+
+.dtable{width:100%;border-collapse:collapse}
+.dtable th{text-align:left;padding:10px 14px;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text3);border-bottom:1px solid var(--border)}
+.dtable td{padding:14px;border-bottom:1px solid var(--border);font-size:13px}
+.dtable tr:hover td{background:rgba(255,255,255,.015)}
+.badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:50px;display:inline-flex;align-items:center;gap:5px}
+.b-active{background:rgba(0,230,118,.12);color:var(--green)}
+.b-warn{background:rgba(255,215,64,.12);color:var(--gold)}
+.b-parked{background:rgba(160,160,184,.1);color:var(--text2)}
+.tog{width:40px;height:22px;background:var(--border);border-radius:11px;position:relative;cursor:pointer;transition:.3s}
+.tog.on{background:var(--green)}.tog::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:.3s}.tog.on::after{transform:translateX(18px)}
+
+/* ============ DNS EDITOR ============ */
+.dns-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.dns-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:var(--surface);border-bottom:1px solid var(--border)}
+.dns-bar select{background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:var(--radius-xs);padding:7px 14px;font-family:'JetBrains Mono',monospace;font-size:12px}
+.dns-bar .add-btn{background:var(--fire);color:#000;border:0;padding:7px 18px;border-radius:50px;font-weight:700;font-size:12px;cursor:pointer}
+.dns-row{display:grid;grid-template-columns:90px 1fr 1fr 80px 70px;gap:10px;padding:12px 20px;border-bottom:1px solid var(--border);align-items:center;font-size:12px}
+.dns-row.hdr{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text3);background:var(--bg)}
+.dns-row input{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-xs);padding:7px 10px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:11px;width:100%}
+.type-tag{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;padding:3px 8px;border-radius:4px;display:inline-block}
+.t-a{background:rgba(255,87,34,.12);color:var(--fire)}.t-cn{background:rgba(0,229,255,.12);color:var(--cyan)}.t-mx{background:rgba(255,215,64,.12);color:var(--gold)}.t-txt{background:rgba(160,160,184,.12);color:var(--text2)}
+.dns-acts{display:flex;gap:6px}.dns-acts button{background:0;border:0;cursor:pointer;font-size:14px;transition:.2s}.dns-acts button:hover{transform:scale(1.2)}
+
+/* ============ MARKETPLACE ============ */
+.mp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+.auc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:.3s}
+.auc:hover{border-color:var(--fire);transform:translateY(-3px);box-shadow:0 8px 40px rgba(0,0,0,.3)}
+.auc-name{font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:700;margin-bottom:3px}
+.auc-meta{font-size:11px;color:var(--text3);margin-bottom:14px}
+.auc-row{display:flex;justify-content:space-between;align-items:flex-end}
+.auc-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
+.auc-val{font-family:'Anybody',sans-serif;font-size:22px;font-weight:800;color:var(--cyan)}
+.auc-timer{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--red);margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.bid-btn{margin-top:14px;width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:9px;border-radius:50px;font-weight:600;font-size:12px;cursor:pointer;transition:.25s}
+.bid-btn:hover{background:var(--fire);color:#000;border-color:var(--fire)}
+
+/* ============ PRICING ============ */
+.price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;align-items:start}
+.pc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:36px 28px;transition:.35s;position:relative}
+.pc:hover{transform:translateY(-5px);box-shadow:0 0 40px rgba(255,87,34,.06)}
+.pc.featured{border-color:var(--fire);background:linear-gradient(180deg,rgba(255,87,34,.05) 0%,var(--bg2) 40%)}
+.pc.featured::before{content:'🌮 MOST POPULAR';position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gradient-fire);color:#000;padding:5px 18px;border-radius:50px;font-size:10px;font-weight:800;letter-spacing:1px;white-space:nowrap}
+.pc-name{font-family:'Anybody',sans-serif;font-size:20px;font-weight:700;margin-bottom:6px}
+.pc-desc{font-size:13px;color:var(--text2);margin-bottom:20px}
+.pc-price{font-family:'Anybody',sans-serif;font-size:44px;font-weight:900;margin-bottom:2px}
+.pc-price span{font-size:15px;color:var(--text2);font-weight:400}
+.pc-per{font-size:12px;color:var(--text3);margin-bottom:28px}
+.pc ul{list-style:none;margin-bottom:28px}
+.pc li{padding:6px 0;font-size:13px;color:var(--text2);display:flex;align-items:center;gap:8px}
+.pc li::before{content:'✓';color:var(--cyan);font-weight:700}
+.btn-full{width:100%;padding:13px;border:0;border-radius:50px;font-family:'Anybody',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:.3s}
+.btn-primary{background:var(--gradient-fire);color:#000}.btn-primary:hover{box-shadow:0 6px 28px rgba(255,87,34,.3);transform:translateY(-2px)}
+.btn-sec{background:transparent;color:var(--text);border:2px solid var(--border)}.btn-sec:hover{border-color:var(--fire);color:var(--fire)}
+
+/* ============ BONUS TACO ============ */
+.bonus-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.bc{background:linear-gradient(135deg,var(--bg2),var(--surface));border:1px solid var(--border);border-radius:var(--radius);padding:30px 24px;text-align:center;transition:.35s;position:relative;overflow:hidden}
+.bc::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(255,87,34,.07),transparent 60%);opacity:0;transition:.4s}
+.bc:hover::after{opacity:1}
+.bc:hover{transform:translateY(-3px);border-color:var(--fire)}
+.bc-emoji{font-size:44px;margin-bottom:14px;display:block;position:relative;z-index:1}
+.bc h3{position:relative;z-index:1;font-size:16px;margin-bottom:8px}
+.bc p{position:relative;z-index:1;font-size:12px;color:var(--text2)}
+
+/* ============ API SECTION ============ */
+.code-block{background:#08080e;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-top:28px}
+.code-hdr{display:flex;align-items:center;gap:8px;padding:10px 18px;background:var(--surface);border-bottom:1px solid var(--border)}
+.ctab{padding:5px 14px;border-radius:50px;font-size:11px;cursor:pointer;color:var(--text3);transition:.2s;font-family:'Outfit',sans-serif;font-weight:600}
+.ctab.active{background:var(--fire);color:#000}
+.ctab:hover:not(.active){color:var(--text)}
+.code-body{padding:22px;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.8;color:var(--text2);overflow-x:auto;white-space:pre}
+.kw{color:var(--fire)}.str{color:var(--cyan)}.fn{color:var(--gold)}.cm{color:var(--text4)}
+
+/* ============ TAGLINES ============ */
+.tagline-strip{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;padding:20px 0}
+.tagline-scroll{display:flex;animation:scrollX 30s linear infinite;width:max-content}
+.tagline-scroll span{white-space:nowrap;padding:0 40px;font-family:'Anybody',sans-serif;font-size:16px;font-weight:700;color:var(--text3)}
+.tagline-scroll span em{color:var(--fire);font-style:normal}
+@keyframes scrollX{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ============ CHATBOT ============ */
+.chat-fab{position:fixed;bottom:28px;right:28px;width:60px;height:60px;background:var(--gradient-fire);border:0;border-radius:50%;font-size:26px;cursor:pointer;box-shadow:0 6px 28px rgba(255,87,34,.4);transition:.3s;z-index:900}
+.chat-fab:hover{transform:scale(1.1)}
+.chat-win{position:fixed;bottom:100px;right:28px;width:370px;max-height:480px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 16px 60px rgba(0,0,0,.5);display:none;flex-direction:column;z-index:900;overflow:hidden}
+.chat-win.open{display:flex}
+.chat-top{padding:14px 18px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.chat-top h4{font-size:15px}
+.chat-x{background:0;border:0;color:var(--text3);font-size:18px;cursor:pointer}
+.chat-msgs{flex:1;padding:16px;overflow-y:auto;max-height:320px;display:flex;flex-direction:column;gap:10px}
+.c-msg{max-width:80%;padding:10px 14px;border-radius:14px;font-size:13px;line-height:1.5}
+.c-msg.bot{background:var(--surface);align-self:flex-start;border-bottom-left-radius:4px}
+.c-msg.user{background:var(--fire);color:#000;font-weight:500;align-self:flex-end;border-bottom-right-radius:4px}
+.chat-in{display:flex;border-top:1px solid var(--border)}
+.chat-in input{flex:1;padding:12px 14px;background:0;border:0;outline:0;color:var(--text);font-size:13px}
+.chat-in button{background:var(--fire);border:0;padding:12px 18px;color:#000;font-weight:700;cursor:pointer;font-size:13px}
+
+/* ============ HOW IT WORKS ============ */
+.hiw-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;counter-reset:step}
+.hiw-step{position:relative;padding:32px 24px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);text-align:center;counter-increment:step;transition:.3s}
+.hiw-step:hover{border-color:var(--fire);transform:translateY(-3px)}
+.hiw-step::before{content:counter(step);font-family:'Anybody',sans-serif;font-size:52px;font-weight:900;color:rgba(255,87,34,.1);position:absolute;top:10px;left:20px}
+.hiw-step .step-icon{font-size:36px;margin-bottom:12px;display:block;position:relative;z-index:1}
+.hiw-step h4{position:relative;z-index:1;margin-bottom:6px}
+.hiw-step p{position:relative;z-index:1;font-size:13px;color:var(--text2)}
+
+/* ============ MODAL ============ */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);display:none;justify-content:center;align-items:center;z-index:2000}
+.modal-bg.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:36px;width:90%;max-width:500px;animation:fadeUp .3s ease-out}
+.modal h2{margin-bottom:20px}
+.modal label{display:block;font-size:12px;color:var(--text2);margin:14px 0 5px}
+.modal input,.modal select{width:100%;padding:11px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-xs);color:var(--text);font-size:13px}
+.modal .tog-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.modal-btns{display:flex;gap:10px;margin-top:28px}
+.modal-btns button{flex:1;padding:13px;border-radius:50px;font-weight:700;cursor:pointer;font-size:13px}
+
+/* ============ FOOTER ============ */
+footer{border-top:1px solid var(--border);padding:72px 24px 36px;max-width:1240px;margin:0 auto}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:52px}
+.ft-brand p{color:var(--text2);font-size:13px;margin-top:10px;max-width:280px}
+footer h5{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:16px}
+footer ul{list-style:none}footer ul li{margin-bottom:8px}footer ul a{color:var(--text2);font-size:13px}footer ul a:hover{color:var(--text)}
+.ft-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:28px;border-top:1px solid var(--border);font-size:12px;color:var(--text3)}
+
+/* ============ PAGES (shown/hidden) ============ */
+.page{display:none}.page.active{display:block}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:900px){
+  .nav-links{display:none;position:fixed;top:68px;left:0;right:0;background:var(--bg2);flex-direction:column;padding:20px;border-bottom:1px solid var(--border);gap:4px}
+  .nav-links.open{display:flex}
+  .mobile-toggle{display:block}
+  .dash-body{grid-template-columns:1fr}.dash-side{display:none}
+  .dash-stats{grid-template-columns:repeat(2,1fr)}
+  .ft-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .hero h1{font-size:2.4rem}
+  .search-bar{flex-direction:column;border-radius:var(--radius)}
+  .search-bar input{padding:14px 18px}.search-bar button{border-radius:0 0 12px 12px;padding:14px}
+  .dash-stats{grid-template-columns:1fr}
+  .price-grid{grid-template-columns:1fr}
+  .ft-grid{grid-template-columns:1fr}
+  .chat-win{right:10px;left:10px;width:auto}
+}
+
+/* ============ SCROLL REVEAL ============ */
+.reveal{opacity:0;transform:translateY(36px);transition:all .7s cubic-bezier(.16,1,.3,1)}
+.reveal.vis{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="#" class="nav-logo" onclick="showPage('home')">
+    <img src="taco_logo.png" alt="Taco Domains">
+    <span>Taco Domains</span>
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="#" onclick="showPage('home')">Home</a>
+    <a href="#" onclick="showPage('home');scrollToEl('features')">Features</a>
+    <a href="#" onclick="showPage('dashboard')">Dashboard</a>
+    <a href="#" onclick="showPage('dns')">DNS</a>
+    <a href="#" onclick="showPage('marketplace')">Marketplace</a>
+    <a href="#" onclick="showPage('pricing')">Pricing</a>
+    <a href="#" onclick="showPage('api')">API</a>
+    <a href="#" onclick="showPage('home')" class="nav-cta">Get Started</a>
+  </div>
+  <button class="mobile-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button>
+</nav>
+
+<!-- ============================================================ -->
+<!-- PAGE: HOME                                                    -->
+<!-- ============================================================ -->
+<div class="page active" id="page-home">
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </div>
+  <div class="hero-chip"><span class="pulse"></span> Now serving .taco domains</div>
+  <img src="taco_logo.png" alt="Taco Domains" class="hero-logo-img">
+  <h1>Get Your <span class="fire">Domain.</span><br>No Salsa Required.</h1>
+  <p class="hero-sub">The spiciest domain registrar on the internet. Hot domains. Fresh ideas. Zero crumbs.</p>
+
+  <div class="hero-ctas">
+    <button class="btn btn-fire" onclick="document.getElementById('domainSearch').focus()">🔍 Search Your Domain</button>
+    <button class="btn btn-outline" onclick="scrollToEl('how-it-works')">📖 How It Works</button>
+  </div>
+
+  <div class="search-wrap">
+    <div class="search-bar">
+      <input type="text" id="domainSearch" placeholder="Find your perfect domain name..." onkeydown="if(event.key==='Enter')searchDomains()">
+      <button onclick="searchDomains()">Search</button>
+    </div>
+    <div class="tld-row">
+      <span onclick="appendTLD('.com')">.com</span>
+      <span onclick="appendTLD('.io')">.io</span>
+      <span onclick="appendTLD('.ai')">.ai</span>
+      <span onclick="appendTLD('.app')">.app</span>
+      <span onclick="appendTLD('.se')">.se</span>
+      <span onclick="appendTLD('.nu')">.nu</span>
+      <span onclick="appendTLD('.tech')">.tech</span>
+      <span onclick="appendTLD('.xyz')">.xyz</span>
+      <span onclick="appendTLD('.dev')">.dev</span>
+    </div>
+    <div class="bulk-toggle">
+      <input type="checkbox" id="bulkCheck" onchange="document.getElementById('bulkArea').classList.toggle('show')">
+      <label for="bulkCheck">Bulk domain search</label>
+    </div>
+    <div class="bulk-area" id="bulkArea">
+      <textarea placeholder="Enter one domain per line, e.g.&#10;taco-shop.com&#10;salsa-hub.io&#10;guac-lord.dev"></textarea>
+      <button class="btn btn-fire" onclick="bulkSearch()">Search All</button>
+    </div>
+    <div class="results-box" id="searchResults"></div>
+  </div>
+</section>
+
+<!-- TAGLINE STRIP -->
+<div class="tagline-strip">
+  <div class="tagline-scroll">
+    <span>🌮 <em>Don't be shellfish</em> — claim your domain today!</span>
+    <span>🔥 <em>Hot domains.</em> Fresh ideas. Zero crumbs.</span>
+    <span>🌶️ Your website deserves more than a <em>boring burrito.</em></span>
+    <span>🥑 Domain registration with <em>extra guac</em> (optional)</span>
+    <span>🔒 Even tacos need <em>security.</em> Get SSL today.</span>
+    <span>🚀 Street tacos meets <em>Silicon Valley.</em></span>
+    <span>🌮 <em>Don't be shellfish</em> — claim your domain today!</span>
+    <span>🔥 <em>Hot domains.</em> Fresh ideas. Zero crumbs.</span>
+    <span>🌶️ Your website deserves more than a <em>boring burrito.</em></span>
+    <span>🥑 Domain registration with <em>extra guac</em> (optional)</span>
+    <span>🔒 Even tacos need <em>security.</em> Get SSL today.</span>
+    <span>🚀 Street tacos meets <em>Silicon Valley.</em></span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<div class="services-strip">
+  <div class="services-inner">
+    <div class="services-grid">
+      <div class="srv-card"><span class="srv-icon">🌐</span><h4>Domain Registration</h4><p>.com, .io, .ai, .app, .se, .nu, .tech, .info — and if .taco existed, we'd register it.</p></div>
+      <div class="srv-card"><span class="srv-icon">💡</span><h4>Domain Brainstorming</h4><p>Spicy suggestions guaranteed. We help you find the perfect name for your brand.</p></div>
+      <div class="srv-card"><span class="srv-icon">🏪</span><h4>Brandable Marketplace</h4><p>Browse premium brandable domains ready for your next project.</p></div>
+      <div class="srv-card"><span class="srv-icon">☁️</span><h4>Web Hosting</h4><p>Fast hosting with extra guac. SSL included. One-click deploy.</p></div>
+      <div class="srv-card"><span class="srv-icon">🔒</span><h4>SSL Certificates</h4><p>Because even tacos need security. Free Let's Encrypt + premium options.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works" class="reveal">
+  <p class="slabel">// It's easy, promise</p>
+  <h2 class="stitle">How It Works</h2>
+  <p class="sdesc">Three simple steps. Easier than ordering a taco. (Almost.)</p>
+  <div class="hiw-grid">
+    <div class="hiw-step"><span class="step-icon">🔍</span><h4>Search</h4><p>Type your dream domain. We check availability in real-time across all major TLDs.</p></div>
+    <div class="hiw-step"><span class="step-icon">🛒</span><h4>Register</h4><p>One-click registration with WHOIS privacy. No upsells, no tricks, no hidden fees.</p></div>
+    <div class="hiw-step"><span class="step-icon">🚀</span><h4>Launch</h4><p>Point your DNS, set up email, enable SSL — all from one delicious dashboard.</p></div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="reveal">
+  <p class="slabel">// All the toppings</p>
+  <h2 class="stitle">Everything You Need</h2>
+  <p class="sdesc">From registration to DNS management, SSL to marketplace — your entire domain lifecycle, wrapped up tight.</p>
+  <div class="features-grid">
+    <div class="f-card"><span class="f-icon">🔍</span><h3>Domain Search & Registration</h3><p>Real-time availability checker with bulk search. All major TLDs. One-click registration with WHOIS privacy toggle.</p><span class="f-tag tag-hot">HOT</span></div>
+    <div class="f-card"><span class="f-icon">📊</span><h3>Management Dashboard</h3><p>Centralized control panel. Renewal reminders, auto-renew toggle, domain forwarding & parking.</p></div>
+    <div class="f-card"><span class="f-icon">🌐</span><h3>DNS Hosting & Management</h3><p>Free, fast, anycast DNS. Custom TTL, DNSSEC support, zone file import/export.</p><span class="f-tag tag-free">FREE</span></div>
+    <div class="f-card"><span class="f-icon">📧</span><h3>Email Forwarding & MX</h3><p>Simple forwarding — contact@yourdomain → your@gmail.com. MX wizard included.</p></div>
+    <div class="f-card"><span class="f-icon">🔒</span><h3>SSL/TLS Certificates</h3><p>Free Let's Encrypt auto-install & renew. Premium OV/EV options. One-click HTTPS.</p><span class="f-tag tag-free">FREE</span></div>
+    <div class="f-card"><span class="f-icon">🏪</span><h3>Domain Marketplace</h3><p>Buy/sell domains. Auction system for expiring & premium domains. Secure escrow.</p><span class="f-tag tag-new">NEW</span></div>
+    <div class="f-card"><span class="f-icon">🔗</span><h3>Shortlinks & Subdomains</h3><p>Branded short URLs like go.taco.domains/yourlink. Vanity subdomains with click analytics.</p></div>
+    <div class="f-card"><span class="f-icon">⚡</span><h3>Developer API</h3><p>RESTful API for domain/DNS automation. Webhooks, CLI tool, Node.js & Python SDKs.</p><span class="f-tag tag-pro">PRO</span></div>
+    <div class="f-card"><span class="f-icon">💬</span><h3>Support & Education</h3><p>AI chatbot + live chat. "Taco Tips" guides & videos. Community forum & Discord.</p></div>
+    <div class="f-card"><span class="f-icon">💰</span><h3>Billing & Subscriptions</h3><p>Transparent pricing. Wallet system for prepaid credits. Team billing & referral rewards. 🌮</p></div>
+  </div>
+</section>
+
+<!-- BONUS -->
+<section class="reveal">
+  <p class="slabel">// Secret menu</p>
+  <h2 class="stitle">Taco Specials 🌮</h2>
+  <p class="sdesc">Exclusive features you won't find anywhere else. Because we're not like other registrars.</p>
+  <div class="bonus-grid">
+    <div class="bc"><span class="bc-emoji">🌶️</span><h3>Spicy Mode</h3><p>Advanced DNS settings for power users. Raw zone editing, custom resolvers, experimental features.</p></div>
+    <div class="bc"><span class="bc-emoji">🔔</span><h3>Taco Bell</h3><p>Notification center that rings when domains expire. SMS, email, Slack, Discord.</p></div>
+    <div class="bc"><span class="bc-emoji">💃</span><h3>Salsa Sync</h3><p>One-click DNS config sync across all your domains. Change once, apply everywhere.</p></div>
+    <div class="bc"><span class="bc-emoji">🥑</span><h3>Guac Guard</h3><p>Premium security: DNSSEC, DDoS protection, domain lock, 2FA for transfers.</p></div>
+  </div>
+</section>
+
+</div><!-- end page-home -->
+
+<!-- ============================================================ -->
+<!-- PAGE: DASHBOARD                                               -->
+<!-- ============================================================ -->
+<div class="page" id="page-dashboard">
+<section style="padding-top:100px">
+  <p class="slabel">// Command center</p>
+  <h2 class="stitle">Your Dashboard</h2>
+  <p class="sdesc">Manage all your domains from one powerful control panel.</p>
+
+  <div class="dash-wrap">
+    <div class="dash-chrome">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <div class="dash-url">🔒 app.taco.domains/dashboard</div>
+      <div style="width:50px"></div>
+    </div>
+    <div class="dash-body">
+      <div class="dash-side">
+        <div class="dash-nav active">📊 Overview</div>
+        <div class="dash-nav">🌐 My Domains</div>
+        <div class="dash-nav">🧬 DNS Records</div>
+        <div class="dash-nav">📧 Email</div>
+        <div class="dash-nav">🔒 SSL Certs</div>
+        <div class="dash-nav">🔗 Shortlinks</div>
+        <div class="dash-nav">🏪 Marketplace</div>
+        <div class="dash-nav">💰 Billing</div>
+        <div class="dash-nav">⚙️ Settings</div>
+      </div>
+      <div class="dash-main">
+        <div class="dash-top"><h3 style="font-family:'Anybody',sans-serif;font-size:22px">Overview</h3><button class="add-btn" style="background:var(--fire);color:#000;border:0;padding:8px 20px;border-radius:50px;font-weight:700;font-size:12px;cursor:pointer" onclick="openReg()">+ Register Domain</button></div>
+        <div class="dash-stats">
+          <div class="ds"><div class="ds-l">Total Domains</div><div class="ds-v">24</div><div class="ds-c up">↑ 3 this month</div></div>
+          <div class="ds"><div class="ds-l">Active DNS Zones</div><div class="ds-v">18</div><div class="ds-c up">↑ 2 new</div></div>
+          <div class="ds"><div class="ds-l">SSL Certificates</div><div class="ds-v">21</div><div class="ds-c">All valid</div></div>
+          <div class="ds"><div class="ds-l">Expiring Soon</div><div class="ds-v" style="color:var(--gold)">2</div><div class="ds-c down">Within 30 days</div></div>
+        </div>
+        <table class="dtable">
+          <thead><tr><th>Domain</th><th>Status</th><th>Expires</th><th>SSL</th><th>Auto-Renew</th></tr></thead>
+          <tbody>
+            <tr><td><strong class="mono">tacobell.taco</strong></td><td><span class="badge b-active">● Active</span></td><td class="mono" style="font-size:12px">2027-03-15</td><td>🔒 Valid</td><td><div class="tog on" onclick="this.classList.toggle('on')"></div></td></tr>
+            <tr><td><strong class="mono">spicy-salsa.com</strong></td><td><span class="badge b-active">● Active</span></td><td class="mono" style="font-size:12px">2026-11-20</td><td>🔒 Valid</td><td><div class="tog on" onclick="this.classList.toggle('on')"></div></td></tr>
+            <tr><td><strong class="mono">guacamole.io</strong></td><td><span class="badge b-warn">● Expiring</span></td><td class="mono" style="font-size:12px;color:var(--gold)">2026-04-02</td><td>🔒 Valid</td><td><div class="tog" onclick="this.classList.toggle('on')"></div></td></tr>
+            <tr><td><strong class="mono">nacho-dev.xyz</strong></td><td><span class="badge b-parked">● Parked</span></td><td class="mono" style="font-size:12px">2027-08-10</td><td style="color:var(--text3)">—</td><td><div class="tog on" onclick="this.classList.toggle('on')"></div></td></tr>
+            <tr><td><strong class="mono">clever.direct</strong></td><td><span class="badge b-active">● Active</span></td><td class="mono" style="font-size:12px">2027-01-05</td><td>🔒 Valid</td><td><div class="tog on" onclick="this.classList.toggle('on')"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: DNS                                                     -->
+<!-- ============================================================ -->
+<div class="page" id="page-dns">
+<section style="padding-top:100px">
+  <p class="slabel">// Full control</p>
+  <h2 class="stitle">DNS Record Editor</h2>
+  <p class="sdesc">Manage A, CNAME, MX, TXT records with our intuitive editor. DNSSEC, custom TTL, zone import/export.</p>
+  <div class="dns-box">
+    <div class="dns-bar">
+      <select><option>spicy-salsa.com</option><option>tacobell.taco</option><option>guacamole.io</option><option>clever.direct</option></select>
+      <div style="display:flex;gap:8px">
+        <button class="add-btn" style="background:var(--surface);color:var(--text2);border:1px solid var(--border);padding:7px 14px;border-radius:50px;font-size:11px;cursor:pointer">Import Zone</button>
+        <button class="add-btn" style="background:var(--surface);color:var(--text2);border:1px solid var(--border);padding:7px 14px;border-radius:50px;font-size:11px;cursor:pointer">Export Zone</button>
+        <button class="add-btn" style="background:var(--fire);color:#000;border:0;padding:7px 18px;border-radius:50px;font-weight:700;font-size:11px;cursor:pointer">+ Add Record</button>
+      </div>
+    </div>
+    <div class="dns-row hdr"><div>Type</div><div>Name</div><div>Value</div><div>TTL</div><div>Actions</div></div>
+    <div class="dns-row"><div><span class="type-tag t-a">A</span></div><div><input value="@" readonly></div><div><input value="185.199.108.153" readonly></div><div class="mono" style="font-size:11px;color:var(--text3)">3600</div><div class="dns-acts"><button>✏️</button><button>🗑️</button></div></div>
+    <div class="dns-row"><div><span class="type-tag t-cn">CNAME</span></div><div><input value="www" readonly></div><div><input value="spicy-salsa.com" readonly></div><div class="mono" style="font-size:11px;color:var(--text3)">3600</div><div class="dns-acts"><button>✏️</button><button>🗑️</button></div></div>
+    <div class="dns-row"><div><span class="type-tag t-mx">MX</span></div><div><input value="@" readonly></div><div><input value="mx1.taco.domains (pri:10)" readonly></div><div class="mono" style="font-size:11px;color:var(--text3)">3600</div><div class="dns-acts"><button>✏️</button><button>🗑️</button></div></div>
+    <div class="dns-row"><div><span class="type-tag t-txt">TXT</span></div><div><input value="@" readonly></div><div><input value="v=spf1 include:taco.domains ~all" readonly></div><div class="mono" style="font-size:11px;color:var(--text3)">3600</div><div class="dns-acts"><button>✏️</button><button>🗑️</button></div></div>
+    <div class="dns-row"><div><span class="type-tag t-a">AAAA</span></div><div><input value="@" readonly></div><div><input value="2606:50c0:8000::153" readonly></div><div class="mono" style="font-size:11px;color:var(--text3)">3600</div><div class="dns-acts"><button>✏️</button><button>🗑️</button></div></div>
+  </div>
+  <div style="margin-top:20px;display:flex;gap:12px;align-items:center">
+    <span style="font-size:13px;color:var(--text2)">🔐 DNSSEC:</span>
+    <div class="tog on" onclick="this.classList.toggle('on')" style="display:inline-block"></div>
+    <span style="font-size:12px;color:var(--text3)">Enabled — DS record published</span>
+  </div>
+</section>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: MARKETPLACE                                             -->
+<!-- ============================================================ -->
+<div class="page" id="page-marketplace">
+<section style="padding-top:100px">
+  <p class="slabel">// Hot marketplace</p>
+  <h2 class="stitle">Domain Marketplace & Auctions</h2>
+  <p class="sdesc">Buy, sell, and bid on premium domains. Secure escrow-backed transactions.</p>
+  <div class="mp-grid">
+    <div class="auc"><div class="auc-name">crypto.taco</div><div class="auc-meta">Premium • @tacofan42</div><div class="auc-row"><div><div class="auc-label">Current Bid</div><div class="auc-val">$12,500</div></div><div style="text-align:right"><div class="auc-label">Bids</div><div style="font-weight:700;font-size:18px">23</div></div></div><div class="auc-timer">⏱ Ends in 2h 34m 12s</div><button class="bid-btn" onclick="alert('🌮 Bid placed!')">Place Bid</button></div>
+    <div class="auc"><div class="auc-name">startup.io</div><div class="auc-meta">Premium • @domainchef</div><div class="auc-row"><div><div class="auc-label">Buy Now</div><div class="auc-val">$8,900</div></div><div style="text-align:right"><div class="auc-label">Views</div><div style="font-weight:700;font-size:18px">847</div></div></div><div class="auc-timer">⏱ Ends in 5h 12m</div><button class="bid-btn">Buy Now</button></div>
+    <div class="auc"><div class="auc-name">cloud.dev</div><div class="auc-meta">Expiring • Auto-listed</div><div class="auc-row"><div><div class="auc-label">Starting Bid</div><div class="auc-val">$2,100</div></div><div style="text-align:right"><div class="auc-label">Bids</div><div style="font-weight:700;font-size:18px">7</div></div></div><div class="auc-timer" style="color:var(--gold)">⏱ Ends in 1d 8h</div><button class="bid-btn">Place Bid</button></div>
+    <div class="auc"><div class="auc-name">salsa.xyz</div><div class="auc-meta">Trending • @spicydev</div><div class="auc-row"><div><div class="auc-label">Current Bid</div><div class="auc-val">$4,200</div></div><div style="text-align:right"><div class="auc-label">Bids</div><div style="font-weight:700;font-size:18px">15</div></div></div><div class="auc-timer">⏱ Ends in 12h 5m</div><button class="bid-btn">Place Bid</button></div>
+    <div class="auc"><div class="auc-name">brand.ai</div><div class="auc-meta">Premium • @nameguru</div><div class="auc-row"><div><div class="auc-label">Buy Now</div><div class="auc-val">$18,000</div></div><div style="text-align:right"><div class="auc-label">Views</div><div style="font-weight:700;font-size:18px">2.1k</div></div></div><div class="auc-timer">⏱ Ends in 3d 2h</div><button class="bid-btn">Buy Now</button></div>
+    <div class="auc"><div class="auc-name">taco.se</div><div class="auc-meta">Rare ccTLD • @svensson</div><div class="auc-row"><div><div class="auc-label">Current Bid</div><div class="auc-val">$3,400</div></div><div style="text-align:right"><div class="auc-label">Bids</div><div style="font-weight:700;font-size:18px">9</div></div></div><div class="auc-timer">⏱ Ends in 6h 40m</div><button class="bid-btn">Place Bid</button></div>
+  </div>
+</section>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: PRICING                                                 -->
+<!-- ============================================================ -->
+<div class="page" id="page-pricing">
+<section style="padding-top:100px">
+  <p class="slabel">// Transparent pricing</p>
+  <h2 class="stitle">Simple, Honest Pricing</h2>
+  <p class="sdesc">No hidden fees. No surprises. Just spicy-good value.</p>
+  <div class="price-grid">
+    <div class="pc"><div class="pc-name">Mild</div><div class="pc-desc">Personal projects</div><div class="pc-price">$0<span>/mo</span></div><div class="pc-per">Free forever</div><ul><li>1 free domain (.xyz)</li><li>Free DNS hosting</li><li>Free SSL certificate</li><li>Email forwarding (1 alias)</li><li>Basic support</li></ul><button class="btn-full btn-sec">Start Free</button></div>
+    <div class="pc featured"><div class="pc-name">Medium</div><div class="pc-desc">Growing businesses</div><div class="pc-price">$9<span>/mo</span></div><div class="pc-per">Billed annually</div><ul><li>Up to 25 domains</li><li>Advanced DNS + DNSSEC</li><li>Wildcard SSL</li><li>Unlimited email forwards</li><li>Branded shortlinks</li><li>API access</li><li>Priority support</li></ul><button class="btn-full btn-primary">Get Medium</button></div>
+    <div class="pc"><div class="pc-name">Extra Spicy 🔥</div><div class="pc-desc">Agencies & power users</div><div class="pc-price">$29<span>/mo</span></div><div class="pc-per">Billed annually</div><ul><li>Unlimited domains</li><li>All DNS + zone export</li><li>EV SSL certificates</li><li>Team billing & permissions</li><li>Marketplace seller tools</li><li>Full API + webhooks + SDKs</li><li>Dedicated support + SLA</li><li>All Taco Specials 🌮</li></ul><button class="btn-full btn-sec">Go Extra Spicy</button></div>
+  </div>
+</section>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: API                                                     -->
+<!-- ============================================================ -->
+<div class="page" id="page-api">
+<section style="padding-top:100px">
+  <p class="slabel">// For developers</p>
+  <h2 class="stitle">Powerful API &<br>Developer Tools</h2>
+  <p class="sdesc">RESTful API, webhooks, CLI tool, and SDKs for Node.js and Python. Automate everything.</p>
+  <div class="code-block">
+    <div class="code-hdr">
+      <span class="ctab active" onclick="switchCode(this,'node')">Node.js</span>
+      <span class="ctab" onclick="switchCode(this,'python')">Python</span>
+      <span class="ctab" onclick="switchCode(this,'curl')">cURL</span>
+    </div>
+    <div class="code-body" id="cNode"><span class="cm">// Install: npm install @taco-domains/sdk</span>
+<span class="kw">import</span> { TacoClient } <span class="kw">from</span> <span class="str">'@taco-domains/sdk'</span>;
+
+<span class="kw">const</span> taco = <span class="kw">new</span> <span class="fn">TacoClient</span>(<span class="str">'YOUR_API_KEY'</span>);
+
+<span class="cm">// Search for available domains</span>
+<span class="kw">const</span> results = <span class="kw">await</span> taco.<span class="fn">search</span>(<span class="str">'my-awesome-taco'</span>, {
+  tlds: [<span class="str">'.com'</span>, <span class="str">'.io'</span>, <span class="str">'.taco'</span>],
+  includePrice: <span class="kw">true</span>
+});
+
+<span class="cm">// Register a domain</span>
+<span class="kw">const</span> domain = <span class="kw">await</span> taco.domains.<span class="fn">register</span>({
+  name: <span class="str">'my-awesome-taco.com'</span>,
+  years: <span class="kw">2</span>,
+  whoisPrivacy: <span class="kw">true</span>,
+  autoRenew: <span class="kw">true</span>
+});
+
+console.<span class="fn">log</span>(<span class="str">`🌮 Registered: ${domain.name}`</span>);</div>
+    <div class="code-body" id="cPython" style="display:none"><span class="cm"># Install: pip install taco-domains</span>
+<span class="kw">from</span> taco_domains <span class="kw">import</span> TacoClient
+
+taco = <span class="fn">TacoClient</span>(api_key=<span class="str">"YOUR_API_KEY"</span>)
+
+<span class="cm"># Search for available domains</span>
+results = taco.<span class="fn">search</span>(
+    query=<span class="str">"my-awesome-taco"</span>,
+    tlds=[<span class="str">".com"</span>, <span class="str">".io"</span>, <span class="str">".taco"</span>]
+)
+
+<span class="cm"># Register a domain</span>
+domain = taco.domains.<span class="fn">register</span>(
+    name=<span class="str">"my-awesome-taco.com"</span>,
+    years=<span class="kw">2</span>,
+    whois_privacy=<span class="kw">True</span>
+)
+
+<span class="fn">print</span>(<span class="str">f"🌮 Registered: {domain.name}"</span>)</div>
+    <div class="code-body" id="cCurl" style="display:none"><span class="cm"># Search domains</span>
+<span class="kw">curl</span> -X GET <span class="str">"https://api.taco.domains/v1/search?q=my-awesome-taco"</span> \
+  -H <span class="str">"Authorization: Bearer YOUR_API_KEY"</span>
+
+<span class="cm"># Register a domain</span>
+<span class="kw">curl</span> -X POST <span class="str">"https://api.taco.domains/v1/domains/register"</span> \
+  -H <span class="str">"Authorization: Bearer YOUR_API_KEY"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{
+    "name": "my-awesome-taco.com",
+    "years": 2,
+    "whois_privacy": true
+  }'</span></div>
+  </div>
+  <div style="margin-top:32px;display:flex;gap:12px;flex-wrap:wrap">
+    <a href="#" class="btn btn-outline" style="font-size:13px">📖 Full API Docs</a>
+    <a href="#" class="btn btn-ghost" style="font-size:13px">🔧 CLI Tool</a>
+    <a href="#" class="btn btn-ghost" style="font-size:13px">🐍 Python SDK</a>
+    <a href="#" class="btn btn-ghost" style="font-size:13px">📦 Node.js SDK</a>
+  </div>
+</section>
+</div>
+
+<!-- FOOTER (always visible) -->
+<footer>
+  <div class="ft-grid">
+    <div class="ft-brand"><a href="#" class="nav-logo" onclick="showPage('home')"><img src="taco_logo.png" alt="Taco Domains" style="height:32px;border-radius:6px"><span>Taco Domains</span></a><p>The spiciest domain registrar on the internet. Born from a love of tacos and a hatred of overpriced domains.</p></div>
+    <div><h5>Products</h5><ul><li><a href="#" onclick="showPage('home');scrollToEl('features')">Domain Search</a></li><li><a href="#" onclick="showPage('dns')">DNS Hosting</a></li><li><a href="#" onclick="showPage('marketplace')">Marketplace</a></li><li><a href="#" onclick="showPage('pricing')">Pricing</a></li><li><a href="#" onclick="showPage('api')">API</a></li></ul></div>
+    <div><h5>Resources</h5><ul><li><a href="#">Taco Tips Blog</a></li><li><a href="#">Documentation</a></li><li><a href="#">Status Page</a></li><li><a href="#">Discord Community</a></li><li><a href="#">Changelog</a></li></ul></div>
+    <div><h5>Company</h5><ul><li><a href="#">About Us</a></li><li><a href="#">Careers</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Contact</a></li></ul></div>
+  </div>
+  <div class="ft-bottom"><span>© 2026 Taco Domains. All rights reserved. 🌮</span><span class="mono" style="font-size:11px">Made with salsa & love</span></div>
+</footer>
+
+<!-- CHATBOT -->
+<button class="chat-fab" onclick="toggleChat()">🌮</button>
+<div class="chat-win" id="chatWin">
+  <div class="chat-top"><h4>🌮 Taco Support</h4><button class="chat-x" onclick="toggleChat()">✕</button></div>
+  <div class="chat-msgs" id="chatMsgs"><div class="c-msg bot">Hey! 👋 I'm Taco Bot. Ask me about domains, DNS, SSL, pricing, or guacamole recipes. 🥑</div></div>
+  <div class="chat-in"><input id="chatIn" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter')sendMsg()"><button onclick="sendMsg()">Send</button></div>
+</div>
+
+<!-- REGISTRATION MODAL -->
+<div class="modal-bg" id="regModal" onclick="if(event.target===this)closeReg()">
+  <div class="modal">
+    <h2>🌮 Register Domain</h2>
+    <label>Domain Name</label>
+    <input type="text" id="modalDom" placeholder="my-awesome-taco.com">
+    <label>Registration Period</label>
+    <select><option>1 Year — $12.99</option><option>2 Years — $23.99</option><option>5 Years — $54.99</option><option>10 Years — $99.99</option></select>
+    <div class="tog-row"><span style="font-size:13px">WHOIS Privacy Protection</span><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+    <div class="tog-row"><span style="font-size:13px">Auto-Renew</span><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+    <div class="modal-btns">
+      <button class="btn-sec" style="border:2px solid var(--border)" onclick="closeReg()">Cancel</button>
+      <button class="btn-primary" onclick="alert('🌮 Domain registered successfully!');closeReg()">Register Now</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========== PAGE ROUTING ==========
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const pg = document.getElementById('page-' + id);
+  if (pg) pg.classList.add('active');
+  window.scrollTo(0, 0);
+  document.getElementById('navLinks').classList.remove('open');
+}
+function scrollToEl(id) {
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+// ========== REAL DOMAIN SEARCH VIA RDAP ==========
+const RDAP_SERVERS = {
+  'com': 'https://rdap.verisign.com/com/v1/domain/',
+  'net': 'https://rdap.verisign.com/net/v1/domain/',
+  'org': 'https://rdap.org/domain/',
+  'io':  'https://rdap.org/domain/',
+  'ai':  'https://rdap.org/domain/',
+  'app': 'https://rdap.org/domain/',
+  'dev': 'https://rdap.org/domain/',
+  'xyz': 'https://rdap.org/domain/',
+  'tech':'https://rdap.org/domain/',
+  'se':  'https://rdap.org/domain/',
+  'nu':  'https://rdap.org/domain/',
+  'info':'https://rdap.org/domain/',
+  'co':  'https://rdap.org/domain/',
+  'taco':'none'
+};
+
+const TLD_PRICES = {
+  'com':'$12.99','net':'$11.99','org':'$10.99','io':'$39.99','ai':'$79.99',
+  'app':'$14.99','dev':'$14.99','xyz':'$2.99','tech':'$6.99','se':'$19.99',
+  'nu':'$17.99','info':'$9.99','co':'$24.99','taco':'$4.20'
+};
+
+async function checkDomain(domain) {
+  const parts = domain.split('.');
+  const tld = parts[parts.length - 1].toLowerCase();
+
+  if (tld === 'taco') {
+    return { domain, available: true, tld, price: TLD_PRICES[tld] || '$9.99' };
+  }
+
+  const server = RDAP_SERVERS[tld];
+  if (!server || server === 'none') {
+    return { domain, available: 'unknown', tld, price: TLD_PRICES[tld] || '$9.99' };
+  }
+
+  try {
+    const url = server.startsWith('https://rdap.org') ? `https://rdap.org/domain/${domain}` : `${server}${domain}`;
+    const resp = await fetch(url, { signal: AbortSignal.timeout(6000) });
+
+    if (resp.status === 404 || resp.status === 400) {
+      return { domain, available: true, tld, price: TLD_PRICES[tld] || '$9.99' };
+    }
+    if (resp.ok) {
+      const data = await resp.json();
+      const taken = data.objectClassName === 'domain' || data.ldhName;
+      return { domain, available: !taken, tld, price: TLD_PRICES[tld] || '$9.99' };
+    }
+    return { domain, available: 'unknown', tld, price: TLD_PRICES[tld] || '$9.99' };
+  } catch (e) {
+    // CORS or timeout — try DNS over HTTPS as fallback
+    try {
+      const dnsResp = await fetch(`https://dns.google/resolve?name=${domain}&type=A`, { signal: AbortSignal.timeout(4000) });
+      const dnsData = await dnsResp.json();
+      if (dnsData.Status === 3) { // NXDOMAIN
+        return { domain, available: true, tld, price: TLD_PRICES[tld] || '$9.99' };
+      }
+      if (dnsData.Answer && dnsData.Answer.length > 0) {
+        return { domain, available: false, tld, price: TLD_PRICES[tld] || '$9.99' };
+      }
+      return { domain, available: 'unknown', tld, price: TLD_PRICES[tld] || '$9.99' };
+    } catch {
+      return { domain, available: 'unknown', tld, price: TLD_PRICES[tld] || '$9.99' };
+    }
+  }
+}
+
+async function searchDomains() {
+  const input = document.getElementById('domainSearch').value.trim().toLowerCase();
+  if (!input) return;
+
+  const box = document.getElementById('searchResults');
+  box.classList.add('show');
+  box.innerHTML = '<div class="loading"><span class="spinner"></span> Checking availability across TLDs...</div>';
+
+  const name = input.replace(/\.\w+$/, '').replace(/[^a-z0-9-]/g, '');
+  if (!name) { box.innerHTML = '<div class="loading">Please enter a valid domain name.</div>'; return; }
+
+  const tlds = ['com', 'io', 'ai', 'app', 'se', 'nu', 'tech', 'xyz', 'dev', 'taco'];
+
+  // If user typed a full domain, check that first
+  const hasTLD = input.includes('.') && input.split('.').pop().length >= 2;
+  const domainsToCheck = hasTLD ? [input] : tlds.map(t => `${name}.${t}`);
+
+  // Show placeholders
+  box.innerHTML = domainsToCheck.map(d =>
+    `<div class="r-item" id="r-${d.replace(/\./g,'-')}">
+      <span class="r-domain mono">${d}</span>
+      <div class="r-right">
+        <span class="r-avail checking">Checking...</span>
+      </div>
+    </div>`
+  ).join('');
+
+  // Check all in parallel
+  const checks = domainsToCheck.map(d => checkDomain(d));
+  const results = await Promise.allSettled(checks);
+
+  results.forEach((r, i) => {
+    const d = domainsToCheck[i];
+    const el = document.getElementById('r-' + d.replace(/\./g, '-'));
+    if (!el) return;
+
+    if (r.status === 'fulfilled') {
+      const { available, price } = r.value;
+      if (available === true) {
+        el.innerHTML = `<span class="r-domain mono">${d}</span><div class="r-right"><span style="color:var(--cyan);font-weight:600;font-size:13px">${price}/yr</span><span class="r-avail yes">Available!</span><button class="btn-sm" onclick="openRegWith('${d}')">Register</button></div>`;
+      } else if (available === false) {
+        el.innerHTML = `<span class="r-domain mono" style="opacity:.5">${d}</span><div class="r-right"><span class="r-avail no">Taken</span><button class="btn-sm offer">Make Offer</button></div>`;
+      } else {
+        el.innerHTML = `<span class="r-domain mono" style="opacity:.7">${d}</span><div class="r-right"><span style="color:var(--cyan);font-weight:600;font-size:13px">${price}/yr</span><span class="r-avail checking">Unknown</span><button class="btn-sm" onclick="openRegWith('${d}')">Try Register</button></div>`;
+      }
+    } else {
+      el.innerHTML = `<span class="r-domain mono" style="opacity:.5">${d}</span><div class="r-right"><span class="r-avail checking">Error</span></div>`;
+    }
+  });
+}
+
+function bulkSearch() {
+  const ta = document.querySelector('.bulk-area textarea');
+  const domains = ta.value.split('\n').map(d => d.trim()).filter(Boolean);
+  if (!domains.length) return;
+
+  const box = document.getElementById('searchResults');
+  box.classList.add('show');
+  box.innerHTML = '<div class="loading"><span class="spinner"></span> Checking ' + domains.length + ' domains...</div>';
+
+  box.innerHTML = domains.map(d =>
+    `<div class="r-item" id="r-${d.replace(/\./g,'-')}"><span class="r-domain mono">${d}</span><div class="r-right"><span class="r-avail checking">Checking...</span></div></div>`
+  ).join('');
+
+  domains.forEach(async d => {
+    const result = await checkDomain(d);
+    const el = document.getElementById('r-' + d.replace(/\./g, '-'));
+    if (!el) return;
+    const { available, price } = result;
+    if (available === true) {
+      el.innerHTML = `<span class="r-domain mono">${d}</span><div class="r-right"><span style="color:var(--cyan);font-weight:600;font-size:13px">${price}/yr</span><span class="r-avail yes">Available!</span><button class="btn-sm" onclick="openRegWith('${d}')">Register</button></div>`;
+    } else if (available === false) {
+      el.innerHTML = `<span class="r-domain mono" style="opacity:.5">${d}</span><div class="r-right"><span class="r-avail no">Taken</span><button class="btn-sm offer">Make Offer</button></div>`;
+    } else {
+      el.innerHTML = `<span class="r-domain mono" style="opacity:.7">${d}</span><div class="r-right"><span class="r-avail checking">Unknown</span></div>`;
+    }
+  });
+}
+
+function appendTLD(tld) {
+  const inp = document.getElementById('domainSearch');
+  let v = inp.value.trim().replace(/\.\w+$/, '');
+  inp.value = v + tld;
+  inp.focus();
+}
+
+// ========== MODAL ==========
+function openReg() { document.getElementById('regModal').classList.add('open'); }
+function openRegWith(d) { document.getElementById('modalDom').value = d; openReg(); }
+function closeReg() { document.getElementById('regModal').classList.remove('open'); }
+
+// ========== CODE TABS ==========
+function switchCode(el, lang) {
+  document.querySelectorAll('.ctab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('cNode').style.display = lang === 'node' ? 'block' : 'none';
+  document.getElementById('cPython').style.display = lang === 'python' ? 'block' : 'none';
+  document.getElementById('cCurl').style.display = lang === 'curl' ? 'block' : 'none';
+}
+
+// ========== CHATBOT ==========
+function toggleChat() { document.getElementById('chatWin').classList.toggle('open'); }
+
+const botDB = {
+  'dns': "DNS translates domain names to IP addresses. Go to your Dashboard → DNS Records to manage A, CNAME, MX, TXT records. We support DNSSEC and custom TTL! 🌐",
+  'ssl': "All domains get free SSL via Let's Encrypt with auto-renew! For EV/OV certs, check our Extra Spicy plan. One-click HTTPS enforcement available. 🔒",
+  'transfer': "To transfer: 1) Unlock domain at current registrar, 2) Get EPP/auth code, 3) Start transfer in dashboard. Usually 5-7 days. We cover the first year free! 🌮",
+  'price': "Mild: Free forever (1 domain). Medium: $9/mo (25 domains). Extra Spicy: $29/mo (unlimited). No hidden fees ever! 💰",
+  'pricing': "Mild: Free forever (1 domain). Medium: $9/mo (25 domains). Extra Spicy: $29/mo (unlimited). No hidden fees ever! 💰",
+  'api': "REST API with full domain/DNS automation. Webhooks for events, CLI tool, Node.js & Python SDKs. Check docs at api.taco.domains 📖⚡",
+  'email': "Email forwarding in 2 clicks! Domain → Email tab → Add rule. contact@yourdomain → your@gmail.com. MX wizard for custom setups too. 📧",
+  'shopify': "To point your domain to Shopify: Add an A record pointing to 23.227.38.65, and a CNAME for 'www' pointing to shops.myshopify.com. Done in our DNS editor! 🛒",
+  'wordpress': "For WordPress: Point your A record to your hosting IP. If using WordPress.com, add a CNAME to your-site.wordpress.com. Easy in our DNS editor! 📝",
+  'guac': "Perfect guacamole: 3 avocados, 2 limes, 1 tsp salt, ½ cup diced onion, 3 tbsp cilantro, 2 roma tomatoes, 1 tsp garlic, pinch of cayenne. Mash & serve! 🥑",
+  'hello': "Hey there! 👋🌮 How can I help you today?",
+  'hi': "Hey! 🌮 Welcome to Taco Domains! What can I help you with?",
+  'help': "I can help with: domains, DNS, SSL, email, transfers, pricing, API, and guacamole recipes! What's on your mind? 🌮",
+};
+
+function sendMsg() {
+  const inp = document.getElementById('chatIn');
+  const msg = inp.value.trim();
+  if (!msg) return;
+  const box = document.getElementById('chatMsgs');
+  box.innerHTML += `<div class="c-msg user">${msg}</div>`;
+  inp.value = '';
+  setTimeout(() => {
+    const lower = msg.toLowerCase();
+    let resp = "Great question! 🌮 I'd recommend checking our docs or asking about: dns, ssl, email, pricing, transfers, api, or shopify setup. What interests you?";
+    for (const [k, v] of Object.entries(botDB)) { if (lower.includes(k)) { resp = v; break; } }
+    box.innerHTML += `<div class="c-msg bot">${resp}</div>`;
+    box.scrollTop = box.scrollHeight;
+  }, 500);
+}
+
+// ========== SCROLL REVEAL ==========
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// ========== KEYBOARD ==========
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+    e.preventDefault(); showPage('home'); document.getElementById('domainSearch').focus();
+  }
+  if (e.key === 'Escape') closeReg();
+});
+</script>
+</body>
+</html>
