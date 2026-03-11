@@ -31,11 +31,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. User can trigger a password reset email and set a new password via the reset link
   5. User can update their display name and avatar from a profile settings page
   6. The application renders correctly on mobile (375px), tablet (768px), and desktop (1440px) viewports with the taco-themed dark design
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
+- [ ] 01-01-PLAN.md — Next.js scaffold, Prisma schema, Tailwind v4 taco theme, RegistrarAdapter interface
+- [ ] 01-02-PLAN.md — Auth.js v5 setup, signup/login/logout flows, route protection middleware
+- [ ] 01-03-PLAN.md — Reusable UI components (Button, Input, Card), public navbar, dashboard sidebar layouts
+- [ ] 01-04-PLAN.md — Password reset flow, profile settings page, end-to-end verification checkpoint
 
 ### Phase 2: Domain Search and Landing Page
 **Goal**: Users can search for domain availability in real-time and see the full public landing page with hero, features, and pricing
@@ -107,7 +109,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation and Authentication | 0/? | Not started | - |
+| 1. Foundation and Authentication | 0/4 | Planning complete | - |
 | 2. Domain Search and Landing Page | 0/? | Not started | - |
 | 3. Domain Registration and Dashboard | 0/? | Not started | - |
 | 4. DNS Management | 0/? | Not started | - |
