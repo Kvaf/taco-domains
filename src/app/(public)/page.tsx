@@ -1,43 +1,32 @@
-import Link from "next/link";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import { HeroSection } from '@/components/landing/hero-section';
+import { TaglineStrip } from '@/components/landing/tagline-strip';
+import { ServicesStrip } from '@/components/landing/services-strip';
+import { HowItWorks } from '@/components/landing/how-it-works';
+import { FeaturesGrid } from '@/components/landing/features-grid';
+import { TacoSpecials } from '@/components/landing/taco-specials';
+import { PricingSection } from '@/components/landing/pricing-section';
+import { Footer } from '@/components/landing/footer';
+import { SearchBar } from '@/components/domain/search-bar';
+
+export const metadata = {
+  title: 'Taco Domains — Get Your Domain. No Salsa Required.',
+  description:
+    'The spiciest domain registrar on the internet. Search, register, and manage domains with a fun taco-themed experience.',
+};
 
 export default function HomePage() {
   return (
-    <section className="flex min-h-[calc(100vh-64px)] flex-col items-center justify-center px-4 text-center">
-      <Image
-        src="/taco_logo.png"
-        alt="Taco Domains"
-        width={120}
-        height={120}
-        className="mb-8 rounded-3xl"
-        priority
-      />
-
-      <h1 className="mb-4 font-[family-name:var(--font-anybody)] text-5xl font-extrabold leading-tight sm:text-6xl lg:text-7xl">
-        Get Your{" "}
-        <span className="bg-gradient-to-r from-fire via-fire-light to-gold bg-clip-text text-transparent">
-          Domain.
-        </span>
-        <br />
-        No Salsa Required.
-      </h1>
-
-      <p className="mb-8 max-w-xl text-lg text-text2">
-        The spiciest domain registrar on the internet. Hot domains. Fresh ideas.
-        Zero crumbs.
-      </p>
-
-      <div className="flex flex-wrap items-center justify-center gap-4">
-        <Link href="/signup">
-          <Button size="lg">Search Your Domain</Button>
-        </Link>
-        <Link href="/login">
-          <Button variant="secondary" size="lg">
-            Log In
-          </Button>
-        </Link>
-      </div>
-    </section>
+    <>
+      <HeroSection>
+        <SearchBar />
+      </HeroSection>
+      <TaglineStrip />
+      <ServicesStrip />
+      <HowItWorks />
+      <FeaturesGrid />
+      <TacoSpecials />
+      <PricingSection />
+      <Footer />
+    </>
   );
 }
