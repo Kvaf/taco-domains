@@ -1,5 +1,8 @@
 'use client';
 
+import { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import type { DomainCheckResult } from '@/lib/rdap/types';
 
 interface SearchResultsProps {
@@ -34,6 +37,59 @@ function AvailabilityBadge({ available }: { available: boolean | 'unknown' }) {
   );
 }
 
+function RegisterButton({ domain }: { domain: string }) {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [registering, setRegistering] = useState(false);
+  const [registered, setRegistered] = useState(false);
+
+  async function handleRegister() {
+    if (!session) {
+      router.push('/login');
+      return;
+    }
+
+    setRegistering(true);
+    try {
+      const res = await fetch('/api/domain/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ domain, years: 1, whoisPrivacy: true, autoRenew: true }),
+      });
+
+      if (res.ok) {
+        setRegistered(true);
+        setTimeout(() => router.push('/dashboard'), 1500);
+      } else {
+        const data = await res.json();
+        alert(data.error || 'Registration failed');
+      }
+    } catch {
+      alert('Network error');
+    } finally {
+      setRegistering(false);
+    }
+  }
+
+  if (registered) {
+    return (
+      <span className="px-4 py-1.5 rounded-full bg-green/10 text-green text-xs font-bold">
+        ✓ Registered!
+      </span>
+    );
+  }
+
+  return (
+    <button
+      onClick={handleRegister}
+      disabled={registering}
+      className="px-4 py-1.5 rounded-full bg-fire text-black text-xs font-bold hover:shadow-[0_4px_16px_rgba(255,87,34,0.3)] hover:-translate-y-0.5 transition-all disabled:opacity-60"
+    >
+      {registering ? 'Registering...' : 'Register'}
+    </button>
+  );
+}
+
 export function SearchResults({ results, suggestions, isLoading, onSearchSuggestion }: SearchResultsProps) {
   if (results.length === 0 && !isLoading) return null;
 
@@ -58,9 +114,7 @@ export function SearchResults({ results, suggestions, isLoading, onSearchSuggest
               </span>
 
               {result.available === true && (
-                <button className="px-4 py-1.5 rounded-full bg-fire text-black text-xs font-bold hover:shadow-[0_4px_16px_rgba(255,87,34,0.3)] hover:-translate-y-0.5 transition-all">
-                  Register
-                </button>
+                <RegisterButton domain={result.domain} />
               )}
               {result.available === false && (
                 <button className="px-4 py-1.5 rounded-full bg-surface text-text2 border border-border text-xs font-bold hover:border-fire hover:text-fire transition-all">

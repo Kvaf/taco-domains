@@ -77,6 +77,8 @@ model Domain {
   autoRenew    Boolean  @default(true)
   locked       Boolean  @default(false)
   whoisPrivacy Boolean  @default(true)
+  redirectUrl  String?
+  redirectType String?  // "301" or "302"
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
