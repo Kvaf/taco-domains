@@ -79,6 +79,7 @@ model Domain {
   whoisPrivacy Boolean  @default(true)
   redirectUrl  String?
   redirectType String?  // "301" or "302"
+  dnssec       Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
