@@ -45,8 +45,7 @@ export async function GET(req: NextRequest) {
     const skip = (page - 1) * limit;
 
     // Build where clause
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const where: any = { status: "ACTIVE" };
+    const where: Record<string, unknown> = { status: "ACTIVE" };
 
     if (search) {
       where.domain = { name: { contains: search.toLowerCase() } };
@@ -55,9 +54,10 @@ export async function GET(req: NextRequest) {
       where.type = type;
     }
     if (minPrice !== undefined || maxPrice !== undefined) {
-      where.price = {};
-      if (minPrice !== undefined) where.price.gte = minPrice;
-      if (maxPrice !== undefined) where.price.lte = maxPrice;
+      const priceFilter: Record<string, number> = {};
+      if (minPrice !== undefined) priceFilter.gte = minPrice;
+      if (maxPrice !== undefined) priceFilter.lte = maxPrice;
+      where.price = priceFilter;
     }
 
     // Check and expire auctions past their end time
@@ -71,8 +71,7 @@ export async function GET(req: NextRequest) {
     });
 
     // Build orderBy
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let orderBy: any = { createdAt: "desc" };
+    let orderBy: Record<string, string> = { createdAt: "desc" };
     if (sort === "price_asc") orderBy = { price: "asc" };
     else if (sort === "price_desc") orderBy = { price: "desc" };
     else if (sort === "newest") orderBy = { createdAt: "desc" };
