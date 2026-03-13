@@ -21,11 +21,13 @@ export const createDnsRecordSchema = z.object({
 
 export const updateDnsRecordSchema = z.object({
   recordId: z.string().min(1),
+  domainId: z.string().min(1).optional(),
   record: dnsRecordSchema,
 });
 
 export const deleteDnsRecordSchema = z.object({
   recordId: z.string().min(1),
+  domainId: z.string().min(1).optional(),
 });
 
 export const toggleDnssecSchema = z.object({

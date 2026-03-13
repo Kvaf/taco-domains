@@ -14,13 +14,20 @@ interface DomainOption {
 
 interface DNSRecord {
   id: string;
-  domainId: string;
+  domainId?: string;
   type: string;
   name: string;
-  value: string;
+  value?: string;
+  content?: string;
   ttl: number;
-  priority: number | null;
-  createdAt: string;
+  priority?: number | null;
+  proxied?: boolean;
+  createdAt?: string;
+}
+
+/** Get the value/content from a record (handles both Cloudflare and local format) */
+function recordValue(r: DNSRecord): string {
+  return r.content || r.value || "";
 }
 
 const RECORD_TYPES = ["A", "AAAA", "CNAME", "MX", "TXT", "NS", "SRV", "CAA"] as const;
@@ -114,7 +121,7 @@ export default function DNSPage() {
     setEditingRecord(record);
     setFormType(record.type);
     setFormName(record.name);
-    setFormValue(record.value);
+    setFormValue(recordValue(record));
     setFormTtl(record.ttl.toString());
     setFormPriority(record.priority?.toString() || "");
     setFormError("");
@@ -144,7 +151,7 @@ export default function DNSPage() {
         const res = await fetch("/api/dns", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ recordId: editingRecord.id, record }),
+          body: JSON.stringify({ recordId: editingRecord.id, domainId: selectedDomainId, record }),
         });
         if (!res.ok) {
           const data = await res.json();
@@ -180,7 +187,7 @@ export default function DNSPage() {
       const res = await fetch("/api/dns", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ recordId }),
+        body: JSON.stringify({ recordId, domainId: selectedDomainId }),
       });
       if (res.ok) fetchRecords();
     } catch (err) {
@@ -366,7 +373,7 @@ export default function DNSPage() {
                     <td className="px-4 py-3 font-mono text-sm">{record.name}</td>
                     <td className="px-4 py-3 font-mono text-xs text-text2 max-w-[300px] truncate">
                       {record.priority != null && <span className="text-text3 mr-1">(pri:{record.priority})</span>}
-                      {record.value}
+                      {recordValue(record)}
                     </td>
                     <td className="px-4 py-3 font-mono text-[11px] text-text3">{record.ttl}</td>
                     <td className="px-4 py-3">

@@ -8,8 +8,9 @@ import {
   toggleDnssecSchema,
 } from "@/lib/validators/dns.schema";
 import { checkFeature } from "@/lib/settings/feature-gate";
+import * as cloudflare from "@/lib/cloudflare/client";
 
-// GET /api/dns?domainId=xxx — List DNS records for a domain
+// GET /api/dns?domainId=xxx — List DNS records from Cloudflare
 export async function GET(req: NextRequest) {
   try {
     const gate = await checkFeature("dnsManagement");
@@ -33,19 +34,44 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Domain not found" }, { status: 404 });
     }
 
-    const records = await prisma.dNSRecord.findMany({
-      where: { domainId },
-      orderBy: [{ type: "asc" }, { name: "asc" }],
-    });
+    // Get Zone ID from Cloudflare
+    const zoneId = await cloudflare.getZoneId(domain.name);
 
-    return NextResponse.json({ records, domain: { id: domain.id, name: domain.name, dnssec: domain.dnssec } });
+    if (!zoneId) {
+      // Fallback to database records if domain isn't on Cloudflare
+      const records = await prisma.dNSRecord.findMany({
+        where: { domainId },
+        orderBy: [{ type: "asc" }, { name: "asc" }],
+      });
+      return NextResponse.json({
+        records: records.map((r) => ({
+          id: r.id,
+          type: r.type,
+          name: r.name,
+          content: r.value,
+          ttl: r.ttl,
+          priority: r.priority,
+        })),
+        domain: { id: domain.id, name: domain.name, dnssec: domain.dnssec },
+        source: "local",
+      });
+    }
+
+    // Fetch live records from Cloudflare
+    const cfRecords = await cloudflare.listRecords(zoneId);
+
+    return NextResponse.json({
+      records: cfRecords,
+      domain: { id: domain.id, name: domain.name, dnssec: domain.dnssec },
+      source: "cloudflare",
+    });
   } catch (error) {
     console.error("DNS GET error:", error);
     return NextResponse.json({ error: "Failed to fetch records" }, { status: 500 });
   }
 }
 
-// POST /api/dns — Create a DNS record
+// POST /api/dns — Create a DNS record on Cloudflare
 export async function POST(req: NextRequest) {
   try {
     const session = await auth();
@@ -72,6 +98,21 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Domain not found" }, { status: 404 });
     }
 
+    const zoneId = await cloudflare.getZoneId(domain.name);
+
+    if (zoneId) {
+      // Create on Cloudflare
+      const created = await cloudflare.createRecord(zoneId, {
+        type: record.type,
+        name: record.name === "@" ? domain.name : `${record.name}.${domain.name}`,
+        content: record.value,
+        ttl: record.ttl,
+        priority: record.priority,
+      });
+      return NextResponse.json({ success: true, record: created, source: "cloudflare" });
+    }
+
+    // Fallback: save to database
     const created = await prisma.dNSRecord.create({
       data: {
         domainId,
@@ -83,14 +124,15 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return NextResponse.json({ success: true, record: created });
+    return NextResponse.json({ success: true, record: created, source: "local" });
   } catch (error) {
     console.error("DNS POST error:", error);
-    return NextResponse.json({ error: "Failed to create record" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Failed to create record";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
-// PUT /api/dns — Update a DNS record
+// PUT /api/dns — Update a DNS record on Cloudflare
 export async function PUT(req: NextRequest) {
   try {
     const session = await auth();
@@ -107,9 +149,40 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    const { recordId, record } = validation.data;
+    const { recordId, domainId, record } = validation.data;
 
-    // Verify ownership through record → domain → user
+    // We need the domain to look up the zone
+    const did = domainId || (await prisma.dNSRecord.findUnique({
+      where: { id: recordId },
+      select: { domainId: true },
+    }))?.domainId;
+
+    if (!did) {
+      return NextResponse.json({ error: "Record not found" }, { status: 404 });
+    }
+
+    const domain = await prisma.domain.findFirst({
+      where: { id: did, userId: session.user.id },
+    });
+    if (!domain) {
+      return NextResponse.json({ error: "Domain not found" }, { status: 404 });
+    }
+
+    const zoneId = await cloudflare.getZoneId(domain.name);
+
+    if (zoneId) {
+      // Update on Cloudflare (recordId is the CF record ID)
+      const updated = await cloudflare.updateRecord(zoneId, recordId, {
+        type: record.type,
+        name: record.name === "@" ? domain.name : `${record.name}.${domain.name}`,
+        content: record.value,
+        ttl: record.ttl,
+        priority: record.priority,
+      });
+      return NextResponse.json({ success: true, record: updated, source: "cloudflare" });
+    }
+
+    // Fallback: update in database
     const existing = await prisma.dNSRecord.findUnique({
       where: { id: recordId },
       include: { domain: { select: { userId: true } } },
@@ -129,14 +202,15 @@ export async function PUT(req: NextRequest) {
       },
     });
 
-    return NextResponse.json({ success: true, record: updated });
+    return NextResponse.json({ success: true, record: updated, source: "local" });
   } catch (error) {
     console.error("DNS PUT error:", error);
-    return NextResponse.json({ error: "Failed to update record" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Failed to update record";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
-// DELETE /api/dns — Delete a DNS record
+// DELETE /api/dns — Delete a DNS record from Cloudflare
 export async function DELETE(req: NextRequest) {
   try {
     const session = await auth();
@@ -153,9 +227,34 @@ export async function DELETE(req: NextRequest) {
       );
     }
 
-    const { recordId } = validation.data;
+    const { recordId, domainId } = validation.data;
 
-    // Verify ownership
+    // Get domain for zone lookup
+    const did = domainId || (await prisma.dNSRecord.findUnique({
+      where: { id: recordId },
+      select: { domainId: true },
+    }))?.domainId;
+
+    if (!did) {
+      return NextResponse.json({ error: "Record not found" }, { status: 404 });
+    }
+
+    const domain = await prisma.domain.findFirst({
+      where: { id: did, userId: session.user.id },
+    });
+    if (!domain) {
+      return NextResponse.json({ error: "Domain not found" }, { status: 404 });
+    }
+
+    const zoneId = await cloudflare.getZoneId(domain.name);
+
+    if (zoneId) {
+      // Delete from Cloudflare
+      await cloudflare.deleteRecord(zoneId, recordId);
+      return NextResponse.json({ success: true, source: "cloudflare" });
+    }
+
+    // Fallback: delete from database
     const existing = await prisma.dNSRecord.findUnique({
       where: { id: recordId },
       include: { domain: { select: { userId: true } } },
@@ -165,11 +264,11 @@ export async function DELETE(req: NextRequest) {
     }
 
     await prisma.dNSRecord.delete({ where: { id: recordId } });
-
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, source: "local" });
   } catch (error) {
     console.error("DNS DELETE error:", error);
-    return NextResponse.json({ error: "Failed to delete record" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Failed to delete record";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
