@@ -10,6 +10,8 @@ import {
   RefreshCw,
   ExternalLink,
   Search,
+  Plus,
+  X,
 } from "lucide-react";
 
 interface DomainData {
@@ -69,6 +71,10 @@ export default function DomainsPage() {
   const [domains, setDomains] = useState<DomainData[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("");
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newDomain, setNewDomain] = useState("");
+  const [addError, setAddError] = useState("");
+  const [adding, setAdding] = useState(false);
 
   const fetchDomains = useCallback(async () => {
     try {
@@ -87,6 +93,37 @@ export default function DomainsPage() {
   useEffect(() => {
     fetchDomains();
   }, [fetchDomains]);
+
+  async function addDomain(e: React.FormEvent) {
+    e.preventDefault();
+    if (!newDomain.trim()) return;
+
+    setAdding(true);
+    setAddError("");
+
+    try {
+      const res = await fetch("/api/domain/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newDomain.trim() }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setAddError(data.error || "Failed to add domain");
+        return;
+      }
+
+      setNewDomain("");
+      setShowAddForm(false);
+      fetchDomains();
+    } catch {
+      setAddError("Failed to add domain");
+    } finally {
+      setAdding(false);
+    }
+  }
 
   const filtered = domains.filter((d) =>
     d.name.toLowerCase().includes(filter.toLowerCase())
@@ -113,13 +150,60 @@ export default function DomainsPage() {
             <p className="text-sm text-text3">{domains.length} domain{domains.length !== 1 ? "s" : ""} registered</p>
           </div>
         </div>
-        <Link
-          href="/"
-          className="rounded-lg bg-fire px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-fire-light"
-        >
-          Register New
-        </Link>
+        <div className="flex gap-2">
+          <button
+            onClick={() => { setShowAddForm(!showAddForm); setAddError(""); }}
+            className="flex items-center gap-1.5 rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-text transition-colors hover:bg-surface2"
+          >
+            <Plus className="h-4 w-4" />
+            Add Domain
+          </button>
+          <Link
+            href="/"
+            className="rounded-lg bg-fire px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-fire-light"
+          >
+            Register New
+          </Link>
+        </div>
       </div>
+
+      {/* Add domain form */}
+      {showAddForm && (
+        <form
+          onSubmit={addDomain}
+          className="rounded-xl border border-fire/20 bg-surface p-4"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-text">Add Existing Domain</h3>
+            <button
+              type="button"
+              onClick={() => setShowAddForm(false)}
+              className="text-text4 hover:text-text"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={newDomain}
+              onChange={(e) => { setNewDomain(e.target.value); setAddError(""); }}
+              placeholder="example.com"
+              className="flex-1 rounded-lg border border-border bg-bg px-3 py-2 text-sm text-text placeholder:text-text4 focus:border-fire focus:outline-none"
+            />
+            <button
+              type="submit"
+              disabled={adding || !newDomain.trim()}
+              className="rounded-lg bg-fire px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-fire-light disabled:opacity-50"
+            >
+              {adding ? "Adding..." : "Add"}
+            </button>
+          </div>
+          {addError && (
+            <p className="mt-2 text-sm text-red-400">{addError}</p>
+          )}
+        </form>
+      )}
 
       {/* Search */}
       {domains.length > 0 && (
