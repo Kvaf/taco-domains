@@ -28,7 +28,7 @@ const navItems = [
   { icon: LayoutDashboard, label: "Overview", href: "/dashboard", active: true },
   { icon: Globe, label: "My Domains", href: "/dashboard/domains", active: true },
   { icon: Server, label: "DNS Records", href: "/dashboard/dns", active: true },
-  { icon: ShoppingBag, label: "Marketplace", href: "/dashboard/marketplace", active: false },
+  { icon: ShoppingBag, label: "Marketplace", href: "/dashboard/marketplace", active: true },
   { icon: Settings, label: "Settings", href: "/dashboard/settings", active: true },
 ];
 
