@@ -10,6 +10,7 @@ import {
   Server,
   ShoppingBag,
   Settings,
+  Shield,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -20,21 +21,24 @@ import { LogoutButton } from "@/components/auth/logout-button";
 interface DashboardSidebarProps {
   userName: string;
   userImage?: string | null;
+  userRole?: string;
   isOpen: boolean;
   onToggle: () => void;
 }
 
 const navItems = [
-  { icon: LayoutDashboard, label: "Overview", href: "/dashboard", active: true },
-  { icon: Globe, label: "My Domains", href: "/dashboard/domains", active: true },
-  { icon: Server, label: "DNS Records", href: "/dashboard/dns", active: true },
-  { icon: ShoppingBag, label: "Marketplace", href: "/dashboard/marketplace", active: true },
-  { icon: Settings, label: "Settings", href: "/dashboard/settings", active: true },
+  { icon: LayoutDashboard, label: "Overview", href: "/dashboard", active: true, adminOnly: false },
+  { icon: Globe, label: "My Domains", href: "/dashboard/domains", active: true, adminOnly: false },
+  { icon: Server, label: "DNS Records", href: "/dashboard/dns", active: true, adminOnly: false },
+  { icon: ShoppingBag, label: "Marketplace", href: "/dashboard/marketplace", active: true, adminOnly: false },
+  { icon: Settings, label: "Settings", href: "/dashboard/settings", active: true, adminOnly: false },
+  { icon: Shield, label: "Admin", href: "/dashboard/admin", active: true, adminOnly: true },
 ];
 
 export function DashboardSidebar({
   userName,
   userImage,
+  userRole,
   isOpen,
   onToggle,
 }: DashboardSidebarProps) {
@@ -82,7 +86,7 @@ export function DashboardSidebar({
 
         {/* Nav items */}
         <nav className="flex-1 space-y-1 px-2 py-4">
-          {navItems.map((item) => {
+          {navItems.filter((item) => !item.adminOnly || userRole === "ADMIN").map((item) => {
             const isActive =
               pathname === item.href ||
               (item.href !== "/dashboard" && pathname.startsWith(item.href));

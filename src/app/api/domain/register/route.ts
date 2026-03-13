@@ -3,9 +3,13 @@ import { auth } from "@/lib/auth/auth-options";
 import { registrar } from "@/lib/adapters";
 import { registerDomainSchema } from "@/lib/validators/domain-actions.schema";
 import { TLD_MAP } from "@/lib/rdap/tld-config";
+import { checkFeature } from "@/lib/settings/feature-gate";
 
 export async function POST(req: NextRequest) {
   try {
+    const gate = await checkFeature("domainRegistration");
+    if (gate) return gate;
+
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

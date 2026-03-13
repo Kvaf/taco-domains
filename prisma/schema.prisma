@@ -17,6 +17,7 @@ model User {
   passwordHash  String?
   name          String?
   image         String?
+  role          String    @default("USER") // USER, ADMIN
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -63,6 +64,20 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+// ─── Site Settings (Admin Feature Flags) ─────────────────────────────────────
+
+model SiteSettings {
+  id                 String   @id @default("default")
+  domainSearch       Boolean  @default(true)
+  domainRegistration Boolean  @default(true)
+  dnsManagement      Boolean  @default(true)
+  marketplace        Boolean  @default(true)
+  signup             Boolean  @default(true)
+  maintenanceMode    Boolean  @default(false)
+  maintenanceMessage String?
+  updatedAt          DateTime @updatedAt
 }
 
 // ─── Domain Models (Defined for later phases) ──────────────────────────────────

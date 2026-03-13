@@ -28,12 +28,14 @@ export default function DashboardLayout({
 
   const userName = session?.user?.name || "User";
   const userImage = session?.user?.image;
+  const userRole = session?.user?.role;
 
   return (
     <div className="min-h-screen bg-bg">
       <DashboardSidebar
         userName={userName}
         userImage={userImage}
+        userRole={userRole}
         isOpen={sidebarOpen}
         onToggle={() => setSidebarOpen(!sidebarOpen)}
       />

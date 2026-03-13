@@ -7,10 +7,14 @@ import {
   deleteDnsRecordSchema,
   toggleDnssecSchema,
 } from "@/lib/validators/dns.schema";
+import { checkFeature } from "@/lib/settings/feature-gate";
 
 // GET /api/dns?domainId=xxx — List DNS records for a domain
 export async function GET(req: NextRequest) {
   try {
+    const gate = await checkFeature("dnsManagement");
+    if (gate) return gate;
+
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

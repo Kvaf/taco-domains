@@ -2,9 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { checkDomains } from '@/lib/rdap/rdap-client';
 import { domainSearchSchema } from '@/lib/validators/domain.schema';
 import { generateSuggestions } from '@/lib/suggestions';
+import { checkFeature } from '@/lib/settings/feature-gate';
 
 export async function POST(req: NextRequest) {
   try {
+    const gate = await checkFeature('domainSearch');
+    if (gate) return gate;
     const body = await req.json();
 
     const validation = domainSearchSchema.safeParse(body);

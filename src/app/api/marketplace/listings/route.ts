@@ -6,6 +6,7 @@ import {
   browseListingsSchema,
   cancelListingSchema,
 } from "@/lib/validators/marketplace.schema";
+import { checkFeature } from "@/lib/settings/feature-gate";
 
 /**
  * GET /api/marketplace/listings — Browse marketplace listings
@@ -13,6 +14,8 @@ import {
  */
 export async function GET(req: NextRequest) {
   try {
+    const gate = await checkFeature("marketplace");
+    if (gate) return gate;
     const url = new URL(req.url);
     const params = {
       search: url.searchParams.get("search") || undefined,

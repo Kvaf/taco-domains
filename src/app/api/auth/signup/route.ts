@@ -2,9 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db/prisma";
 import { signUpSchema } from "@/lib/validators/auth.schema";
+import { checkFeature } from "@/lib/settings/feature-gate";
 
 export async function POST(req: NextRequest) {
   try {
+    const gate = await checkFeature("signup");
+    if (gate) return gate;
     const body = await req.json();
     const parsed = signUpSchema.safeParse(body);
 
